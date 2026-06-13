@@ -23,15 +23,37 @@ async function tryAutofill() {
   return new Promise((resolve) => {
     chrome.storage.local.get(['dsa_current_page'], (result) => {
       const page = result.dsa_current_page;
+
       if (!page) return resolve();
-      // Only use if detected in last 10 seconds (tab is fresh)
-      if (Date.now() - page.timestamp > 10000) return resolve();
-      const { name } = detectPlatform(page.url, page.title);
-      const nameInput = document.getElementById('add-name');
-      if (name && nameInput) {
-        nameInput.value = name;
-        document.getElementById('autofill-hint').textContent = '✓ auto-detected';
-      }
+
+      if (Date.now() - page.timestamp > 10000)
+        return resolve();
+
+      const card = document.getElementById(
+        'detected-problem'
+      );
+
+      if (!card) return resolve();
+
+      card.style.display = 'block';
+
+      document.getElementById(
+        'detected-title'
+      ).textContent = page.title || '';
+
+      document.getElementById(
+        'detected-difficulty'
+      ).textContent = page.difficulty
+        ? `Difficulty: ${page.difficulty}`
+        : '';
+
+      document.getElementById(
+        'detected-topics'
+      ).textContent =
+        page.topics?.length
+          ? page.topics.join(' • ')
+          : '';
+
       resolve();
     });
   });
@@ -231,9 +253,54 @@ async function handleAdd() {
   toast('Problem added');
   render();
 }
+async function handleDetectedAdd() {
+  const result = await chrome.storage.local.get([
+    'dsa_current_page',
+  ]);
 
+  const page = result.dsa_current_page;
+
+  if (!page || !page.title) {
+    toast('No detected problem');
+    return;
+  }
+
+  const duplicate = allProblems.find(
+    (p) => p.url && p.url === page.url
+  );
+
+  if (duplicate) {
+    toast('Already tracked');
+    return;
+  }
+
+  const problem = createProblem({
+    name: page.title,
+    url: page.url,
+    difficulty: page.difficulty || 'medium',
+    topics: page.topics || [],
+    platform: page.platform || 'other',
+  });
+
+  allProblems = await addProblem(problem);
+
+  toast('✓ Problem added');
+
+  render();
+}
 // ── Bind global events ────────────────────────────────────────────────────────
 function bindEvents() {
+  const detectedBtn =
+  document.getElementById(
+    'add-detected-btn'
+  );
+
+if (detectedBtn) {
+  detectedBtn.addEventListener(
+    'click',
+    handleDetectedAdd
+  );
+}
   // Search
   document.getElementById('search-input').addEventListener('input', (e) => {
     searchQuery = e.target.value;

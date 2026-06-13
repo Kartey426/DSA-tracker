@@ -33,3 +33,4 @@ chrome.alarms.onAlarm.addListener(() => {
     updateBadge(result.dsa_problems || []);
   });
 });
+

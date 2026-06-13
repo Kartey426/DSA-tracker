@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-
   <!-- Header -->
   <div class="header">
     <div class="header-left">
@@ -67,7 +66,25 @@
       No problems yet.<br/>Add one below or visit a problem page.
     </div>
   </div>
+  <div id="detected-problem" class="detected-card" style="display:none">
+  <div class="detected-header">
+    🎯 Detected Problem
+  </div>
 
+  <div id="detected-title" class="detected-title"></div>
+
+  <div id="detected-difficulty" class="detected-difficulty"></div>
+
+  <div id="detected-topics" class="detected-topics"></div>
+
+  <button
+    id="add-detected-btn"
+    class="add-btn"
+    style="margin-top:8px;"
+  >
+    + Add to Tracker
+  </button>
+</div>
   <!-- Add problem -->
   <div class="add-section">
     <div class="add-row">

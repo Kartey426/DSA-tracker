@@ -380,3 +380,36 @@ body {
   white-space: nowrap;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.detected-card {
+  margin: 10px 12px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.detected-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.detected-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.detected-difficulty {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.detected-topics {
+  font-size: 11px;
+  color: #999;
+  line-height: 1.4;
+}
