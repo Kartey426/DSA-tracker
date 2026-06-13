@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "DSA Tracker",
+  "version": "1.0",
+  "description": "Track your DSA problems with notes, timestamps, and revision reminders.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://leetcode.com/problems/*",
+        "https://www.geeksforgeeks.org/*",
+        "https://codeforces.com/problemset/problem/*",
+        "https://codeforces.com/contest/*/problem/*",
+        "https://www.codechef.com/problems/*",
+        "https://practice.geeksforgeeks.org/problems/*",
+        "https://neetcode.io/*"
+      ],
+      "js": ["content/detector.js"]
+    }
+  ],
+  "permissions": ["storage", "tabs", "alarms", "activeTab"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
