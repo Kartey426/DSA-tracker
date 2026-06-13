@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSA Tracker</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span class="header-icon">🌿</span>
+      <span class="header-title">DSA Tracker</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btn-stats" title="Stats">📊</button>
+      <button class="icon-btn" id="btn-settings" title="Settings">⚙️</button>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-val" id="stat-total">0</div>
+      <div class="stat-lbl">Total</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val val-solved" id="stat-solved">0</div>
+      <div class="stat-lbl">Solved</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val val-revision" id="stat-revision">0</div>
+      <div class="stat-lbl">Revision</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val val-streak" id="stat-streak">0</div>
+      <div class="stat-lbl">🔥 Streak</div>
+    </div>
+  </div>
+
+  <!-- Search + sort toolbar -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search problems..." />
+    </div>
+    <button class="icon-btn" id="btn-sort" title="Sort by date">↕</button>
+  </div>
+
+  <!-- Filter chips -->
+  <div class="filters" id="filter-chips">
+    <div class="chip active" data-filter="all">All</div>
+    <div class="chip" data-filter="solved">Solved</div>
+    <div class="chip" data-filter="revision">Revision</div>
+    <div class="chip" data-filter="unsolved">Unsolved</div>
+    <div class="chip" data-filter="easy">Easy</div>
+    <div class="chip" data-filter="medium">Medium</div>
+    <div class="chip" data-filter="hard">Hard</div>
+  </div>
+
+  <!-- Problem list -->
+  <div class="problems-list" id="problems-list">
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      No problems yet.<br/>Add one below or visit a problem page.
+    </div>
+  </div>
+
+  <!-- Add problem -->
+  <div class="add-section">
+    <div class="add-row">
+      <input class="add-input" id="add-name" type="text" placeholder="Problem name or paste LeetCode/GFG URL…" />
+      <button class="add-btn" id="btn-add">+ Add</button>
+    </div>
+    <div class="add-options">
+      <select class="add-select" id="add-difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <select class="add-select" id="add-topic">
+        <option value="">Topic…</option>
+        <option>Array</option><option>String</option><option>Linked List</option>
+        <option>Stack</option><option>Queue</option><option>Tree</option>
+        <option>Graph</option><option>DP</option><option>Recursion</option>
+        <option>Backtracking</option><option>Binary Search</option>
+        <option>Sliding Window</option><option>Two Pointers</option>
+        <option>Heap</option><option>Hashing</option><option>Greedy</option>
+        <option>Math</option><option>Bit Manipulation</option>
+        <option>Trie</option><option>Segment Tree</option>
+      </select>
+      <span id="autofill-hint" style="font-size:10px;color:#aaa;"></span>
+    </div>
+  </div>
+
+  <!-- Footer: Export / Import -->
+  <div class="footer">
+    <button class="export-btn primary" id="btn-export-xlsx">
+      ⬇ Export to Excel
+    </button>
+    <button class="export-btn" id="btn-export-json">
+      ⬇ JSON backup
+    </button>
+    <label class="import-label" title="Import JSON backup">
+      ⬆ Import
+      <input type="file" id="import-file" accept=".json" style="display:none" />
+    </label>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
