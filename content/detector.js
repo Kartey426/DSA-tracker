@@ -1,54 +1,66 @@
 (function () {
   const url = window.location.href;
 
-  if (!url.includes("leetcode.com/problems/")) return;
+  // Platform detection
+  let platform = null;
+  if (url.includes("leetcode.com/problems/")) {
+    platform = "leetcode";
+  } else if (/codeforces\.com\/(problemset\/problem|contest)\/[\d]+\/problem\//.test(url)) {
+    platform = "codeforces";
+  }
+
+  if (!platform) return;
 
   const data = {
     url,
     title: document.title,
     difficulty: "",
     topics: [],
-    platform: "leetcode",
+    platform,
     timestamp: Date.now(),
   };
 
   try {
-    const titleEl = document.querySelector(
-      '[data-cy="question-title"]'
-    );
+    if (platform === "leetcode") {
+      // your existing leetcode extraction
+      const titleEl = document.querySelector('[data-cy="question-title"]');
+      if (titleEl) data.title = titleEl.textContent.trim();
 
-    if (titleEl) {
-      data.title = titleEl.textContent.trim();
-    }
-
-    const allEls = [...document.querySelectorAll("*")];
-
-    for (const el of allEls) {
-      const txt = el.textContent?.trim();
-
-      if (
-        txt === "Easy" ||
-        txt === "Medium" ||
-        txt === "Hard"
-      ) {
-        data.difficulty = txt.toLowerCase();
-        break;
+      const allEls = [...document.querySelectorAll("*")];
+      for (const el of allEls) {
+        const txt = el.textContent?.trim();
+        if (txt === "Easy" || txt === "Medium" || txt === "Hard") {
+          data.difficulty = txt.toLowerCase();
+          break;
+        }
       }
+
+      const topicLinks = document.querySelectorAll('a[href*="/tag/"]');
+      data.topics = [...topicLinks].map((t) => t.textContent.trim()).filter(Boolean);
+
+    } else if (platform === "codeforces") {
+      // strip " - Codeforces" from tab title
+      // await new Promise(r => setTimeout(r, 500));  // wait for render
+      const titleEl = document.querySelector(".problem-statement .title");
+      data.title = titleEl
+        ? titleEl.textContent.trim()
+        : document.title.replace(" - Codeforces", "").trim();
+      // data.title = document.title.replace(" - Codeforces", "").trim();
+
+      // difficulty = rating shown in the sidebar
+      const ratingEl = document.querySelector(".tag-box[title='Difficulty']");
+      if (ratingEl) data.difficulty = ratingEl.textContent.trim(); // "*1400"
+
+      // topics = the tag pills (hidden until you click, but still in DOM)
+      const tagEls = document.querySelectorAll(".roundbox .tag-box");
+      data.topics = [...tagEls]
+        .map((t) => t.textContent.trim())
+        .filter((t) => !t.startsWith("*") && t !== "");  // exclude the rating tag
     }
 
-    const topicLinks = document.querySelectorAll(
-      'a[href*="/tag/"]'
-    );
-
-    data.topics = [...topicLinks]
-      .map((t) => t.textContent.trim())
-      .filter(Boolean);
-
-    chrome.storage.local.set({
-      dsa_current_page: data,
-    });
-
+    chrome.storage.local.set({ dsa_current_page: data });
     injectTrackerCard(data);
+
   } catch (err) {
     console.error(err);
   }
